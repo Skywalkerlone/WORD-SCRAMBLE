@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Word Scramble</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at center,white, rgba(122, 122, 255, 0.663))  ;
+            line-height: 3rem;
+            transition: all ease-in-out 1s ;
+        }
+        .container{
+            width: 700px;
+            border-radius: 7px;
+            background: white;
+            animation: fadein  2s;
+            box-shadow:0 0 20px #3a51af61;
+        }
+
+        @keyframes fadein{
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+        .container h1{
+            font-size: 25px;
+            font-weight: 800;
+            padding: 18px 25px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.292);
+            box-shadow:0 0 20px #25252554;
+            background: linear-gradient(90deg,rgb(255, 255, 255) ,rgb(232, 235, 255),white);
+            border-end-end-radius: 110px;
+        }
+        .container .content{
+            margin: 25px 20px 35px;
+        }
+        .content .word{
+            font-size: 33px;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 24px;
+            margin-right: -25px;
+            text-transform: uppercase;
+        }
+        .details p{
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .details p b{
+            font-weight: 500;
+        }
+        .content input{
+            width: 100%;
+            height: 60px;
+            outline: none;
+            font-size: 20px;
+            padding: 0 16px;
+            border-radius: 5px;
+            border: 2px solid rgb(53, 53, 52);
+        }
+        .buttons{
+            display: flex;
+            margin-top: 20px;
+            justify-content: space-between;
+        }
+        .buttons button{
+            align-items: center;
+            margin-top: 8px;
+            border: none;
+            outline: none;
+            width: calc(100% / 2 - 8px);
+            border-radius: 6px;
+            font-size: 17px;
+            cursor: pointer;
+            color: aliceblue;
+            padding: 15px 0;
+            transition: all ease-in-out 1s ;
+        }
+
+
+
+        .buttons .refresh-word:hover{
+    color: #252525;
+    /* background-color: #ffffff; */
+    background: linear-gradient(134deg, rgb(193, 193, 193), rgb(98, 98, 162));
+    transform: scale(1.0004);  
+     border-bottom: 1px solid rgba(8, 9, 9, 0.434);
+     border-right: 1px solid white;
+     padding: 10px 20px;
+     /* will-change: transform; */
+     transition: all ease-in-out 1s ;
+        }
+
+        .buttons .check-word:hover{
+    color: #252525;
+    /* background-color: #ffffff; */
+    background: linear-gradient(134deg, rgb(135, 134, 134), rgb(35, 35, 44));
+    transform: scale(1.0004);  
+     border-bottom: 1px solid rgba(8, 9, 9, 0.434);
+     border-right: 1px solid white;
+     padding: 10px 20px;
+     /* will-change: transform; */
+     transition: all ease-in-out 1s ;
+
+        }
+        .buttons .refresh-word{
+            background: rgb(98, 98, 162);
+            margin-right: 10px;
+        }
+        .buttons .check-word{
+            background: rgb(55, 55, 58);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Word Scramble</h1>
+        <div class="content">
+            <p class="word">mdasesn</p>
+            <div class="details">
+                <p class="hint">Hint: <span>learning JavaScript and SQL</span></p>
+                <p class="time-left">Time left: <span><b>30s</b></span></p>
+            </div>
+            <input type="text" placeholder="Enter your answer!">
+            <div class="buttons">
+                <button class="refresh-word">Refresh</button>
+                <button class="check-word">Check</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wordText = document.querySelector(".word"),
+            hintText = document.querySelector(".hint span"),
+            timeText = document.querySelector(".time-left b"),
+            inputField = document.querySelector("input"),
+            refreshBtn = document.querySelector(".refresh-word"),
+            checkBtn = document.querySelector(".check-word");
+
+        let correctWord, timer, timeLeft = 30;
+
+        const words = [
+            { word: "snake", hint: "Benin girls" },
+            { word: "darkness", hint: "blinding light" },
+            { word: "expectation", hint: "pressure" },
+            { word: "courage", hint: "bravery under fear" },
+            { word: "happiness", hint: "the smarter you are the less you have it" },
+            { word: "friendship", hint: "fairy tail" },
+            { word: "freedom", hint: "absence of constraints" },
+            { word: "intelligence", hint: "underestimated charm" },
+            { word: "determination", hint: "strong will" },
+            { word: "curiosity", hint: "desire to learn" },
+            { word: "imagination", hint: "creative thinking" },
+            { word: "optimism", hint: "" },
+            { word: "resilience", hint: "ability to recover" },
+            { word: "wisdom", hint: "SHAZAM" },
+            { word: "confidence", hint: "self-assurance" },
+            { word: "patience", hint: "keep thinking you are doing it" },
+            { word: "generosity", hint: "you are used for it" },
+            { word: "humility", hint: "lack of arrogance" },
+            { word: "insomnia", hint: "3am" },
+{ word: "masochist", hint: "loves the pain" },
+{ word: "procrastinate", hint: "lazy ass" },
+{ word: "pandemonium", hint: "absolute chaos" },
+{ word: "sarcasm", hint: "that sharp tongue" },
+{ word: "schadenfreude", hint: "joy in other's pain" },
+{ word: "addiction", hint: "rhymes with rabbit" },
+{ word: "hypocrisy", hint: "double standards" },
+{ word: "manipulation", hint: "twist" },
+{ word: "paranoia", hint: "klaus" },
+{ word: "apocalypse", hint: "the world ends" },
+{ word: "deception", hint: "....disgrace" },
+{ word: "arrogance", hint: "Skywalkers strenght" },
+{ word: "obsession", hint: "can't stop"},
+  
+
+            
+
+            { word: "faith", hint: "believe without doubt" },
+            { word: "nymphomaniac", hint: "out of control" },
+            { word: "jellyfish", hint: "immortality" }
+        ];
+
+        const startTimer = () => {
+            clearInterval(timer); // Clear any existing timer
+            timeLeft = 60;
+            timeText.innerText = `${timeLeft}s`;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timeText.innerText = `${timeLeft}s`;
+
+                if (timeLeft === 0) {
+                    clearInterval(timer);
+                    alert(`Time's up! The correct word was "Go and read your book".`);
+                    initGame(); // Restart the game when time runs out
+                }
+            }, 1000);
+        };
+
+        const initGame = () => {
+            let randomObj = words[Math.floor(Math.random() * words.length)];
+            let wordArray = randomObj.word.split("");
+            for (let i = wordArray.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
+            }
+            wordText.innerText = wordArray.join("");
+            hintText.innerText = randomObj.hint;
+            correctWord = randomObj.word.toLowerCase();
+            inputField.value = "";
+            inputField.setAttribute("maxlength", correctWord.length);
+
+            startTimer(); // Start the countdown when the game initializes
+        };
+
+        const checkWord = () => {
+            let userWord = inputField.value.toLowerCase();
+            if (!userWord) return alert("Don't worry enter word , i won't laugh");
+
+            if (userWord !== correctWord) {
+                return alert(" HA HA HA HA HA  you didn't get that simple thing.");
+            }
+
+            alert("F**K!!! You guessed it right.");
+            clearInterval(timer); // Stop the timer when the correct word is guessed
+            initGame(); // Start a new game after a correct guess
+        };
+
+        refreshBtn.addEventListener("click", initGame);
+        checkBtn.addEventListener("click", checkWord);
+
+        initGame();  // Initialize the game when the page loads
+    </script>
+</body>
+</html>
+``
